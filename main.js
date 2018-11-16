@@ -9,7 +9,7 @@ let dataset;
 HTTP.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(HTTP.responseText);
-        // console.log(dataset);
+        console.log(dataset);
         d3Commands();
     } else {
         console.log("something went wrong");
@@ -116,7 +116,7 @@ function d3Commands() {
         }
       })
       .attr('fill', function(d) { 
-        console.log(d);
+        // console.log(d);
         return d.children ? null : color(d.parent.data.name) 
       })
       .on('mouseover', function(d, i) {
@@ -148,6 +148,41 @@ function d3Commands() {
         return d.data.name;
       })
   }
+
+  // Legends
+  let legend = svg.append("g")
+    .attr("class", "legend")
+    .attr('id', 'legend')
+    .attr("transform","translate(0, 0)")
+    .style("font-size","12px")
+    .selectAll('g')
+    .data([
+      {category: "Action"},
+      {category: "Drama"},
+      {category: "Adventure"},
+      {category: "Family"},
+      {category: "Animation"},
+      {category: "Comedy"},
+      {category: "Biography"},
+    ])
+    .enter().append('g');
+
+  legend.append('rect')
+    .attr('y', (d, i) => 0)
+    .attr('x', (d, i) => i * 20 * 8)
+    .attr('height', 20)
+    .attr('width', 20 * 8)
+    .attr('fill', (d, i) => color(d.category))
+    .attr('stroke-width', 1.5)
+    .attr('stroke', 'black');
+
+  legend.append('text')
+    .attr('y', (d, i) => 0)
+    .attr('x', (d, i) => (i * 20 * 8) + 2)
+    .style('fill', 'black')
+    .attr('weight', 'bold')
+    .attr('font-size', '12pt')
+    .text((d) => '' + (8.66 + d.variance).toFixed(2));
 
   treemaps = d3.select('body')
   .selectAll('svg')
