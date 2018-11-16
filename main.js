@@ -19,8 +19,14 @@ HTTP.onreadystatechange = function(){
 function d3Commands() {
   // console.log(dataset);
 
-  const HEIGHT = 600;
+  const HEIGHT = 650;
   const WIDTH = 1250;
+  const PADDING = {
+    top: 50,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  }
 
   let color = d3.scaleOrdinal(d3.schemePaired);
 
@@ -29,10 +35,20 @@ function d3Commands() {
    .append('svg')
    .attr('height', HEIGHT + 'px')
    .attr('width', WIDTH + 'px');
+
+  // tooltip 
+  const tooltip = d3.select('body')
+    .append('div')
+    .attr('class', 'tooltip')
+    .attr('id', 'tooltip')
+    .attr('data-name', '')
+    .attr('data-category', '')
+    .attr('data-value', '')
+    .attr('opacity', 0);
   
    //  treemaplayout
   let treemap = d3.treemap()
-    .size([WIDTH, HEIGHT])
+    .size([(WIDTH - PADDING.left - PADDING.right), (HEIGHT - PADDING.top - PADDING.bottom)])
 
   //  gets root node
   let rootNode = d3.hierarchy(dataset)
@@ -48,7 +64,7 @@ function d3Commands() {
 
     let nodes = d3.select(this)
       .append('g')
-      .attr('transform', 'translate(0, 20)')
+      .attr('transform', 'translate(0,' + PADDING.top + ')')
       .selectAll('g')
       .data(rootNode.descendants())
       .enter()
@@ -82,6 +98,25 @@ function d3Commands() {
       .attr('fill', function(d) { 
         console.log(d);
         return d.children ? null : color(d.parent.data.name) 
+      })
+      .on('mouseover', function(d, i) {
+        tooltip.transition()
+          .duration(0)
+          .attr('data-name', (d, i) => this.getAttribute('data-name'))
+          .attr('data-category', (d, i) => this.getAttribute('data-category'))
+          .attr('data-value', (d, i) => this.getAttribute('data-value'))
+          .style('opacity', 0.9);
+        tooltip.html(`Name: ${this.getAttribute('data-name')}<br>
+        Category: ${this.getAttribute('data-category')}<br>
+        Value: ${this.getAttribute('data-value')}`)
+          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('top', (d3.event.pageY) + 'px')
+      })
+      .on('mouseout', function(d, i) {
+        tooltip.transition()
+          .duration(200)
+          .attr('data-year', '')
+          .style('opacity', 0);
       });
 
     nodes
