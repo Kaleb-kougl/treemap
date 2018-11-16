@@ -76,10 +76,11 @@ function d3Commands() {
   .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
 
   function enteringTreemap(d) {
-
+    // How to tile the treemap
     treemap.tile(d3.treemapSquarify.ratio(d))
     treemap(rootNode)
 
+    // add nodes to svg
     let nodes = d3.select(this)
       .append('g')
       .attr('transform', 'translate(0,' + PADDING.top + ')')
@@ -89,6 +90,7 @@ function d3Commands() {
       .append('g')
       .attr('transform', function(d) {return 'translate(' + [d.x0, d.y0] + ')'})
   
+      // adding rects to nodes
     nodes
       .append('rect')
       .attr('width', function(d) { return d.x1 - d.x0; })
@@ -137,6 +139,7 @@ function d3Commands() {
           .style('opacity', 0);
       });
 
+      // adding text to nodes
     nodes
       .append('text')
       .attr('dx', 4)
