@@ -36,6 +36,24 @@ function d3Commands() {
    .attr('height', HEIGHT + 'px')
    .attr('width', WIDTH + 'px');
 
+   // TITLE
+  svg.append('text')
+  .attr("y", (15))
+  .attr("x", (WIDTH / 2))
+  .style("text-anchor", "middle")
+  .attr('id', "title")
+  .attr('font-size', '14pt')
+  .attr('font-weight', 'bold')
+  .text("Movie Sales");
+
+  // DESCRIPTION
+  svg.append('text')
+    .attr("y", (35))
+    .attr("x", (WIDTH / 2))
+    .style("text-anchor", "middle")
+    .attr('id', "description")
+    .text("Top 100 Highest Grossing Movies Grouped By Genre");
+
   // tooltip 
   const tooltip = d3.select('body')
     .append('div')
