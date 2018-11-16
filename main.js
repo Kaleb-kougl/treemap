@@ -9,7 +9,7 @@ let dataset;
 HTTP.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(HTTP.responseText);
-        console.log(dataset);
+        // console.log(dataset);
         d3Commands();
     } else {
         console.log("something went wrong");
@@ -29,11 +29,10 @@ function d3Commands() {
    .append('svg')
    .attr('height', HEIGHT + 'px')
    .attr('width', WIDTH + 'px');
-  //  treemaplayout
-
+  
+   //  treemaplayout
   let treemap = d3.treemap()
     .size([WIDTH, HEIGHT])
-    // .paddingOuter(15)
 
   //  gets root node
   let rootNode = d3.hierarchy(dataset)
@@ -60,14 +59,31 @@ function d3Commands() {
       .append('rect')
       .attr('width', function(d) { return d.x1 - d.x0; })
       .attr('height', function(d) { return d.y1 - d.y0; })
+      .attr('class', function(d) {
+        if (d.height === 0) {
+          return 'tile'
+        }
+      })
+      .attr('data-name', (d) => {
+        if (d.height === 0) {
+          return d.data.name;
+        }
+      })
+      .attr('data-category', function(d) {
+        if (d.height === 0) {
+          return d.data.category;
+        }
+      })
+      .attr('data-value', function(d) {
+        if (d.height === 0) {
+          return d.data.value;
+        }
+      })
       .attr('fill', function(d) { 
-        // if (d.children !== null) {
-        //   console.log(color(d.parent.name)); 
-        // }
+        console.log(d);
         return d.children ? null : color(d.parent.data.name) 
       });
 
-  
     nodes
       .append('text')
       .attr('dx', 4)
@@ -80,5 +96,4 @@ function d3Commands() {
   treemaps = d3.select('body')
   .selectAll('svg')
   .each(enteringTreemap)
-
 }
