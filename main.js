@@ -10,8 +10,8 @@ HTTP.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(HTTP.responseText);
         // console.log(dataset);
-        console.log(window.screen.availHeight);
-        console.log(window.screen.availWidth);
+        // console.log(window.screen.availHeight);
+        // console.log(window.screen.availWidth);
         d3Commands();
     } else {
         console.log("something went wrong");
