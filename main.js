@@ -10,6 +10,8 @@ HTTP.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(HTTP.responseText);
         // console.log(dataset);
+        console.log(window.screen.availHeight);
+        console.log(window.screen.availWidth);
         d3Commands();
     } else {
         console.log("something went wrong");
@@ -19,8 +21,8 @@ HTTP.onreadystatechange = function(){
 function d3Commands() {
   // console.log(dataset);
 
-  const HEIGHT = 800;
-  const WIDTH = 1250;
+  const HEIGHT = window.screen.availHeight < 400 ? 500 : window.screen.availHeight;
+  const WIDTH = window.screen.availWidth;
   const PADDING = {
     top: 50,
     bottom: 100,
