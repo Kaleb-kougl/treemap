@@ -9,7 +9,7 @@ let dataset;
 HTTP.onreadystatechange = function(){
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(HTTP.responseText);
-        console.log(dataset);
+        // console.log(dataset);
         d3Commands();
     } else {
         console.log("something went wrong");
@@ -19,11 +19,11 @@ HTTP.onreadystatechange = function(){
 function d3Commands() {
   // console.log(dataset);
 
-  const HEIGHT = 650;
+  const HEIGHT = 800;
   const WIDTH = 1250;
   const PADDING = {
     top: 50,
-    bottom: 0,
+    bottom: 100,
     right: 0,
     left: 0,
   }
@@ -149,6 +149,10 @@ function d3Commands() {
       })
   }
 
+  const LEGEND_RECT_HEIGHT = 20;
+  const LEGEND_RECT_WIDTH = 20;
+  const LEGEND_PADDING_SCALE= 5;
+
   // Legends
   let legend = svg.append("g")
     .attr("class", "legend")
@@ -168,21 +172,22 @@ function d3Commands() {
     .enter().append('g');
 
   legend.append('rect')
-    .attr('y', (d, i) => 0)
-    .attr('x', (d, i) => i * 20 * 8)
-    .attr('height', 20)
-    .attr('width', 20 * 8)
+    .attr('y', (d, i) => HEIGHT - PADDING.bottom + LEGEND_RECT_HEIGHT)
+    .attr('x', (d, i) => i * LEGEND_RECT_WIDTH * LEGEND_PADDING_SCALE)
+    .attr('height', LEGEND_RECT_HEIGHT)
+    .attr('class', 'legend-item')
+    .attr('width', LEGEND_RECT_WIDTH)
     .attr('fill', (d, i) => color(d.category))
     .attr('stroke-width', 1.5)
     .attr('stroke', 'black');
 
   legend.append('text')
-    .attr('y', (d, i) => 0)
-    .attr('x', (d, i) => (i * 20 * 8) + 2)
+    .attr('y', (d, i) => HEIGHT - PADDING.bottom + LEGEND_RECT_HEIGHT + (LEGEND_RECT_HEIGHT / 1.3))
+    .attr('x', (d, i) => (i * LEGEND_RECT_WIDTH * LEGEND_PADDING_SCALE) + LEGEND_RECT_WIDTH)
     .style('fill', 'black')
     .attr('weight', 'bold')
     .attr('font-size', '12pt')
-    .text((d) => '' + (8.66 + d.variance).toFixed(2));
+    .text((d, i) => d.category);
 
   treemaps = d3.select('body')
   .selectAll('svg')
